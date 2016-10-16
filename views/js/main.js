@@ -449,11 +449,10 @@ var resizePizzas = function(size) {
 
   // Iterates through pizza elements on the page and changes their widths
   function changePizzaSizes(size) {
-    var dx = determineDx(document.querySelectorAll(".randomPizzaContainer"), size);
-    var newwidth = (document.querySelectorAll(".randomPizzaContainer").offsetWidth + dx) + 'px';
-    var value = document.querySelectorAll(".randomPizzaContainer");
     for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
-      value[i].style.width = newwidth;
+      var dx = determineDx(document.querySelectorAll(".randomPizzaContainer")[i], size);
+      var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
+      document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
     }
   }
 
@@ -501,11 +500,10 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
 function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
-  var top =   document.body.scrollTop / 1250 ;
-//var top=0;
+
   var items = document.querySelectorAll('.mover');
   for (var i = 0; i < items.length; i++) {
-    var phase = Math.sin(top+ (i % 5));
+    var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
     items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
 
@@ -520,16 +518,14 @@ function updatePositions() {
 }
 
 // runs updatePositions on scroll
-window.addEventListener('scroll', function () {
-  window.requestAnimationFrame(updatePositions);
-});
+window.addEventListener('scroll', updatePositions);
 
-// Geerates the sliding pizzas when the page loads.
+// Generates the sliding pizzas when the page loads.
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
-  var elem = document.createElement('img');
-  for (var i = 0; i < 31; i++) {
+  for (var i = 0; i < 200; i++) {
+    var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
     elem.style.height = "100px";
